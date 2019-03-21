@@ -11,69 +11,77 @@
   
   var database = firebase.database();
   
-  $("#add-employee-btn").on("click", function(event) {
+  $("#add-train-btn").on("click", function(event) {
     event.preventDefault();
   
     var trainName = $("#train-name-input").val().trim();
     var trainDest = $("#destination-input").val().trim();
-    var trainStart = moment($("#start-input").val().trim(), "MM/DD/YYYY").format("X");
     var trainFreq = $("#frequency-input").val().trim();
-  
+
+    var trainTime = $("#start-input").val().trim();
+    
     var newTrain = {
-      name: trainName,
-      destination: trainDest,
-      start: trainStart,
-      frequency: trainFreq
+        name: trainName,
+        destination: trainDest,
+        start: trainTime,
+        frequency: trainFreq
     };
-  
-    database.ref().push(newEmp);
-  
+    
+    database.ref().push(newTrain);
+    
     console.log(newTrain.name);
     console.log(newTrain.destination);
     console.log(newTrain.start);
     console.log(newTrain.frequency);
-  
-    alert("Employee successfully added");
-  
+    
+    alert("Swanky train added!");
+    
     $("#train-name-input").val("");
     $("#destination-input").val("");
     $("#start-input").val("");
     $("#frequency-input").val("");
-  });
-  
-  database.ref().on("child_added", function(childSnapshot) {
-    console.log(childSnapshot.val());
-  
+});
+
+database.ref().on("child_added", function(childSnapshot) {
+    // console.log(childSnapshot.val());
+    
     var trainName = childSnapshot.val().name;
     var trainDest = childSnapshot.val().destination;
     var trainStart = childSnapshot.val().start;
     var trainFreq = childSnapshot.val().frequency;
-  
-    console.log(trainName);
-    console.log(trainDest);
-    console.log(trainStart);
-    console.log(trainFreq);
-  
-    var trainStartPretty = moment.unix(trainStart).format("MM/DD/YYYY");
-  
-    var trainMinutes = moment().diff(moment(trainStart, "X"), "minutes");
-    console.log(trainMinutes);
-  
-    var trainFrequency = trainMinutes * trainFreq;
-    console.log(trainFrequency);
-  
+    
+    // console.log(trainName);
+    // console.log(trainDest);
+    // console.log(trainStart);
+    // console.log(trainFreq);
+    
+    var timeArray = trainStart.split(":");
+    var convTime = moment().hour(timeArray[0]).minute(timeArray[1]);
+    var arrivalMins;
+    var arrivalTime;
+
+    var maxMoment = moment.max(convTime, moment());
+
+    var timeDiff = convTime.diff(moment(), "minutes");
+
+    console.log(timeDiff);
+
+    if(maxMoment === convTime){
+      arrivalTime = convTime.format("hh:mm a");
+      arrivalMins = timeDiff;
+    }
+    else {
+      trainFreq = arrivalTime
+    }
+    
     var newRow = $("<tr>").append(
       $("<td>").text(trainName),
       $("<td>").text(trainDest),
-      $("<td>").text(trainStartPretty),
-      $("<td>").text(trainMinutes),
+      $("<td>").text(trainFreq),
       $("<td>").text(trainStart),
-      $("<td>").text(trainFrequency)
+      $("<td>").text(timeDiff),
     );
   
     $("#train-table > tbody").append(newRow);
   });
   
-// Train info will not show up on the screen when i enter anything in?
-// how to get it to append once it finally shows up?
-// how to use momentJS?
