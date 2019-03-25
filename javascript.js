@@ -71,7 +71,8 @@ database.ref().on("child_added", function(childSnapshot) {
       arrivalMins = timeDiff;
     }
     else {
-      trainFreq;
+      minutesAway = convTime + trainFreq;
+      console.log(minutesAway);
     }
     
     var newRow = $("<tr>").append(
