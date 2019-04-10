@@ -8,4 +8,6 @@
 
 * Once your train is added, sit back and relax in knowing Tiffany's Train Scheduler has you covered from head to toe with luxury amenities
 
+* Please click the link to access the Train Scheduler! https://tjbrincefield.github.io/TrainScheduler/
+
 ## Enjoy!!
